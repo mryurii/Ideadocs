@@ -1,3 +1,10 @@
+:root {
+  --base-font-size: 30px;
+  --columns: 200px 200px;
+  --base-margin: 30px;
+}
+
+
 .navbar {
 font-size: 30px;
 font-weight: bold;
@@ -15,6 +22,7 @@ font-weight: bold;
 
 .title {
 	text-align: center;
+
 }
 .tile {
   height: 250px;
@@ -24,6 +32,19 @@ font-weight: bold;
   font-size: 12px;
   background: lightyellow;
   text-align: left;
+  box-shadow:2px 15px 5px rgba(0, 0, 0, 0.40);
+}
+
+ .boardtitle {  
+ 	word-wrap: break-word;
+ 	value: "Full Name"; 
+}
+
+.titlediv {
+	width: 85%;
+  	border: 15px;
+  	margin: 20px;
+  	display: inline-block;
 }
 
 .newIdeaButton {
@@ -61,6 +82,12 @@ textarea {
 	height: 190px;
 	width: 250px;
 	font-size: 11px;
+}
+
+.notification {
+	font-size: 15px !important;
+	font-weight: lighter;
+
 }
 
 .colorpicker {

@@ -12,14 +12,21 @@ class App extends Component {
     constructor(props) {
     super(props);
     this.state = {
-      transisitonIn: false,
+      TrasitionIn: false,
       notification: ''
     }
     this.setTransitionIn = this.setTransitionIn.bind(this)
+    // this.resetNotification = this.resetNotification.bind(this)
   }
 
   setTransitionIn = (e) => {
     this.setState({transisitonIn: e})
+  }
+
+
+  resetNotification = () => { 
+    this.setTransitionIn(false)
+    this.setState({notification: ''})
   }
 
 
@@ -31,7 +38,9 @@ class App extends Component {
       <Navbar expand="lg" variant="light" bg="light">
       <Container>
      <Navbar.Brand href="/" className="navbar">IDEADOCS</Navbar.Brand>
-    <Notification className="notification" in={true} notification={this.state.notification} />
+     <div className="notification">
+    <Notification in={this.state.transisitonIn} notification={this.state.notification} />
+      </div>
       </Container>
       </Navbar>
       <div className="title-container">
@@ -39,7 +48,10 @@ class App extends Component {
       <BoardTitle />
       <div className="App-header">
       </div>
-     <IdeasContainer setTransitionIn = {this.setTransitionIn}/>
+     <IdeasContainer onChange={notification => {
+      console.log('notification', notification);
+      this.setState({ notification })
+    }} setTransitionIn = {this.setTransitionIn}  resetNotification={this.resetNotification}/>
 
       </div>
     )

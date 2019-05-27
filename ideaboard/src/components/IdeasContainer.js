@@ -6,14 +6,10 @@ import Notification from './Notification'
 import $ from 'jquery';
 import Color from './Color'
 import BoardTitle from './BoardTitle' 
-import firebaseConfig from './fbConfig'
-import  * as firebase from 'firebase' 
+import databse from './fbConfig'
 
 
 
-firebase.initializeApp(firebaseConfig);
-
-const dbRefObject = firebase.database().ref().child('object')
     
 class IdeasContainer extends Component {
   constructor(props) {
@@ -35,7 +31,7 @@ class IdeasContainer extends Component {
   componentDidMount() {
    axios.get('http://localhost:3001/api/v1/ideas.json')
     .then(response => {
-      this.setState({ideas: response.data})
+        this.setState({ideas: response.data})
     })
     .catch(error => console.log(error))
   }
@@ -53,6 +49,8 @@ class IdeasContainer extends Component {
     const ideaIndex = this.state.ideas.findIndex(x => x.id === idea.id)
     const ideas = update(this.state.ideas, {[ideaIndex]: {$set:idea}})
     this.setState({ideas: ideas, notification: 'All changes saved'})
+    console.log('onchange');
+    this.props.onChange("All changes saved");
     this.props.setTransitionIn(true)
     this.sub.send({ ideas: idea.target.value, id: idea.id})
   }
@@ -67,12 +65,6 @@ class IdeasContainer extends Component {
     .catch(error => console.log(error))
   }
 
-  resetNotification = () => { 
-    this.props.setTransitionIn(false)
-    this.setState({notification: ''})
-  }
-
-
   enableEditing = (id) => {
     this.setState({editingIdeaID: id}, () => {this.title.focus() })
   }
@@ -85,7 +77,6 @@ class IdeasContainer extends Component {
 
   selected(e) {
     let selectedRef = this.references.get(e);
-    // console.log("SELECTED: ", selectedRef)
     this.setState({ selected: selectedRef, displayColorPicker: true }, () => console.log('this.state = ', this.state));
   }
 
@@ -115,9 +106,6 @@ handleChangeStateColor = (color) => {
          </div>
           <div className="newideabtn-div">
           </div>
-          <div>
-          <Notification className="notification" in={true} notification={this.state.notification} />
-          </div>
           <div className="color-div">
             <div onClick={ this.handleUnselect }/>
             <Color changeColor={this.changeColor} className="color-div" selected={this.state.selected} color={this.state.color} displayColorPicker={ this.state.displayColorPicker } />
@@ -135,7 +123,7 @@ handleChangeStateColor = (color) => {
               handleChangeStateColor={this.handleChangeStateColor}
               updateIdea={this.updateIdea}
               titleRef = {input => this.title = input}
-              resetNotification={this.resetNotification}
+              resetNotification={this.props.resetNotification}
               onClick={this.enableEditing}
               onDelete={this.deleteIdea} 
               onChangeComplete={ this.handleChangeComplete }

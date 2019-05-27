@@ -14,7 +14,6 @@ class Idea extends Component {
  }
 
 changeBackground(color) {
-  console.log('fires changes');
   this.setState({color});
  }
 
@@ -24,17 +23,12 @@ handleInput = (e) => {
 }
 
 componentDidUpdate(prevProps) {
-	// console.log("PREV PROPS",prevProps)
 	if(prevProps.color != this.props.color) {
 		this.handleChangeColor();
-		// console.log('did update')
 	}
 }
 
 handleChangeColor = () => {
-	// console.log('close');
-	// console.log("Idea: XXXXXXXXXXXXXXXXX", this.props.idea.title);
-	// const idea = {title: this.state.title, body: this.state.body, color: this.state.color}
   axios.put(
     `http://localhost:3001/api/v1/ideas/${this.props.idea.id}`,
     {idea: {title: this.state.title, body: this.state.body, color: this.state.color}}
