@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import IdeasContainer from './components/IdeasContainer'
-import {Navbar, Container} from 'react-bootstrap';
+import {Navbar, Container} from 'react-bootstrap'
 import BoardTitle from './components/BoardTitle'
 import Notification from './components/Notification'
 
