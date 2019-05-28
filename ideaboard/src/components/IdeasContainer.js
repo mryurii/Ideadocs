@@ -34,6 +34,7 @@ class IdeasContainer extends Component {
     this.sub = cable.subscriptions.create('IdeasChannel', {
     received: this.handleReceiveNewIdea
     })
+    console.log("THERE IS", cable)
   })
     .catch(error => console.log(error))
 
@@ -43,6 +44,7 @@ class IdeasContainer extends Component {
     if (idea !== this.state.ideas) {
       this.setState({ idea })
     }
+    console.log("XXXXXx")
   }
 
 

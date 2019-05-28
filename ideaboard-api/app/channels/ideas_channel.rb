@@ -8,7 +8,7 @@ class IdeasChannel < ApplicationCable::Channel
   end
     def receive(data)
     idea = Idea.find(data["id"])
-    idea.update!(text: data["text"])
+    idea.update!(idea: data["title", "body", "color"])
     ActionCable.server.broadcast('ideas', data)
   end
 end
