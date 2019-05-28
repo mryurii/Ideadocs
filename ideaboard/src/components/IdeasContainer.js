@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
-import axios from 'axios' 
+import axios from 'axios'
 import Idea from './Idea'
 import update from 'immutability-helper'
-import Notification from './Notification'
-import $ from 'jquery';
 import Color from './Color'
-import BoardTitle from './BoardTitle'
-import ActionCable from 'actioncable' 
+import ActionCable from 'actioncable'
 
-    
 class IdeasContainer extends Component {
   constructor(props) {
     super(props)
@@ -16,7 +12,7 @@ class IdeasContainer extends Component {
       ideas: [] ,
       editingIdeaID: null,
       editingTitleID: null,
-      notification: '', 
+      notification: '',
       selected: null,
       color: " ",
       displayColorPicker: false
@@ -81,7 +77,7 @@ class IdeasContainer extends Component {
     this.setState({editingIdeaID: id}, () => {this.title.focus() })
   }
 
-  // color 
+  // color
 
   handleClick = () => {
     this.setState({ displayColorPicker: !this.state.displayColorPicker })
@@ -128,19 +124,19 @@ handleChangeStateColor = (color) => {
         {this.state.ideas.map((idea) => {
             return( <Idea
               color={this.state.color}
-              closeBox={ this.closeBox } 
+              closeBox={ this.closeBox }
               className="tile"
-              idea={idea} 
-              key={idea.id} 
+              idea={idea}
+              key={idea.id}
               handleChangeStateColor={this.handleChangeStateColor}
               updateIdea={this.updateIdea}
               titleRef = {input => this.title = input}
               resetNotification={this.props.resetNotification}
               onClick={this.enableEditing}
-              onDelete={this.deleteIdea} 
+              onDelete={this.deleteIdea}
               onChangeComplete={ this.handleChangeComplete }
               ref = {c => this.references.set(idea.id, c)}
-              onClick={() => {this.selected(idea.id)}} />)   
+              onClick={() => {this.selected(idea.id)}} />)
               }
              )}
            <button className= "newIdeaButton" onClick={this.addNewIdea}>

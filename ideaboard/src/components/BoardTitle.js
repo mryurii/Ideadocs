@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import axios from 'axios' 
-
-
+import axios from 'axios'
 
 class BoardTitle extends Component {
   state = {
@@ -33,7 +30,7 @@ class BoardTitle extends Component {
 
 
    unFocus = (e) => {
-     if (e.target.value != "") { 
+     if (e.target.value !== "") {
       this.setState({
         editMode: false,
         title: e.target.value
@@ -43,7 +40,7 @@ class BoardTitle extends Component {
         editMode: false,
         title: "DEFAULT TITLE"
       })
-     }   
+     }
     axios
       .put(`http://localhost:3001/api/v1/boards/${this.state.id}`, {board: {boardtitle: e.target.value}})
       .then( res => {
@@ -58,7 +55,7 @@ class BoardTitle extends Component {
    handleKey = (e) => {
     if (e.key === 'Enter') {
     console.log(e.target.value)
-     if (e.target.value == "") {
+     if (e.target.value === "") {
        console.log("dissapear")
        this.setState({
         title: "DEFAULT TITLE",
@@ -70,7 +67,7 @@ class BoardTitle extends Component {
         editMode: false,
         title: e.target.value
       })
-     }    
+     }
     axios
       .put(`http://localhost:3001/api/v1/boards/${this.state.id}`, {board: {boardtitle: e.target.value}})
       .then( res => {
@@ -86,15 +83,15 @@ class BoardTitle extends Component {
     return(
       <div className="title">
         {
-          this.state.editMode ? 
-          <input defaultValue={this.state.title} onBlur={this.unFocus} onKeyDown={this.handleKey} style={{width:"100%", height:"30px", fontSize:"30px"}}  onClick={this.changeTitle}/> 
+          this.state.editMode ?
+          <input defaultValue={this.state.title} onBlur={this.unFocus} onKeyDown={this.handleKey} style={{width:"100%", height:"30px", fontSize:"30px"}}  onClick={this.changeTitle}/>
           :
           <div className = "titlediv" align="center">
           <h1 className="boardtitle" onClick={this.editTitle}>{this.state.title}</h1>
           </div>
         }
       </div>
-      
+
     );
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import axios from 'axios' 
+import axios from 'axios'
 
 
 class Idea extends Component {
@@ -23,7 +23,7 @@ handleInput = (e) => {
 }
 
 componentDidUpdate(prevProps) {
-	if(prevProps.color != this.props.color) {
+	if(prevProps.color !== this.props.color) {
 		this.handleChangeColor();
 	}
 }
@@ -55,7 +55,7 @@ handleClick = () => {this.props.onClick(this.props.idea.id)}
 			<form onBlur={this.handleChangeColor}>
 
 			<input style={{fontSize: "16px", fontWeight: "bold"}}className='input' type="text" name="title" placeholder='Enter a Title'
-			value={this.state.title} onChange={this.handleInput} 
+			value={this.state.title} onChange={this.handleInput}
 			ref={this.props.titleRef} onClick={this.handleColor} onClick={this.handleClick} />
 
 			<textarea style={{fontSize: "14px"}}className='input' name="body" placeholder='Describe your idea'
