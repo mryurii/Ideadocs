@@ -5,10 +5,8 @@ import update from 'immutability-helper'
 import Notification from './Notification'
 import $ from 'jquery';
 import Color from './Color'
-import BoardTitle from './BoardTitle' 
-import databse from './fbConfig'
-
-
+import BoardTitle from './BoardTitle'
+import ActionCable from 'actioncable' 
 
     
 class IdeasContainer extends Component {
@@ -32,9 +30,21 @@ class IdeasContainer extends Component {
    axios.get('http://localhost:3001/api/v1/ideas.json')
     .then(response => {
         this.setState({ideas: response.data})
+    const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
+    this.sub = cable.subscriptions.create('IdeasChannel', {
+    received: this.handleReceiveNewIdea
     })
+  })
     .catch(error => console.log(error))
+
   }
+
+    handleReceiveNewIdea = ({ idea }) => {
+    if (idea !== this.state.ideas) {
+      this.setState({ idea })
+    }
+  }
+
 
   addNewIdea = () => {
     axios.post('http://localhost:3001/api/v1/ideas', {idea: {title: '', body: '', color: ''}})

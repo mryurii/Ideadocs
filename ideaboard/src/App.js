@@ -39,7 +39,7 @@ class App extends Component {
       <Container>
      <Navbar.Brand href="/" className="navbar">IDEADOCS</Navbar.Brand>
      <div className="notification">
-    <Notification in={this.state.transisitonIn} notification={this.state.notification} />
+      <Notification in={this.state.transisitonIn} notification={this.state.notification} />
       </div>
       </Container>
       </Navbar>
