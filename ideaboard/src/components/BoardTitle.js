@@ -5,14 +5,19 @@ import { ActionCable } from 'react-actioncable-provider'
 
 
 class BoardTitle extends Component {
-  state = {
-    title: "",
-    editMode: false,
-    id: null
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: "",
+      editMode: false,
+      id: null
+    }
+
+    this.handleBoardEvents = this.handleBoardEvents.bind(this)
   }
 
   componentDidMount() {
-   axios.get('http://localhost:3001/api/v1/boards.json')
+    axios.get('http://localhost:3001/api/v1/boards.json')
     .then(response => {
       const title = response.data[0].boardtitle
 
@@ -24,32 +29,30 @@ class BoardTitle extends Component {
     .catch(error => console.log(error))
   }
 
-   editTitle = (title) => {
+  editTitle = (title) => {
     this.setState({
       editMode: !this.state.editMode
-      })
-    }
+    })
+  }
 
-
-   unFocus = (e) => {
-     if (e.target.value !== "") {
+  unFocus = (e) => {
+    if (e.target.value !== "") {
       this.setState({
         editMode: false,
         title: e.target.value
       })
-     } else {
-       this.setState({
+    } else {
+      this.setState({
         editMode: false,
         title: "DEFAULT TITLE"
       })
-     }
+    }
     axios
       .put(`http://localhost:3001/api/v1/boards/${this.state.id}`, {board: {boardtitle: e.target.value}})
       .then( res => {
     })
-     .catch(error => console.log(error))
-   }
-
+    .catch(error => console.log(error))
+  }
 
   handleKey = (e) => {
     if (e.key === 'Enter') {
@@ -75,7 +78,7 @@ class BoardTitle extends Component {
     }
   }
 
-    handleBoardEvents = ({event, board}) => {
+  handleBoardEvents = ({event, board}) => {
     switch(event) {
       case 'updated':
         this.setState({title: board.boardtitle})
@@ -90,7 +93,7 @@ class BoardTitle extends Component {
   render(){
     return(
       <div className="title">
-       <ActionCable
+        <ActionCable
           channel={{channel: "BoardsChannel"}}
           onReceived={this.handleBoardEvents}
         />

@@ -15,11 +15,13 @@ module Api::V1
 	 def update
       @board = Board.find(params[:id])
       @board.update_attributes(board_params)
+
       ActionCable.server.broadcast 'boards', event: :updated, board: @board
+
       render json: @board
     end
 
-  private	
+  private
 	def board_params
 		params.require(:board).permit(:boardtitle)
 		end
