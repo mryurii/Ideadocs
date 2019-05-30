@@ -6,7 +6,7 @@ import BoardTitle from './components/BoardTitle'
 import Notification from './components/Notification'
 
 class App extends Component {
-    constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       TrasitionIn: false,
@@ -25,11 +25,11 @@ class App extends Component {
     this.setState({notification: ''})
   }
 
-   setNotification = (notification) => {
+  setNotification = (notification) => {
     this.setState({ notification })
   }
 
-render() {
+  render() {
     return (
       <div className="App">
         <Navbar expand="lg" variant="light" bg="light">
