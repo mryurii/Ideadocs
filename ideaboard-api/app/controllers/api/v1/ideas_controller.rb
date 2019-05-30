@@ -1,6 +1,6 @@
 module Api::V1
   class IdeasController < ApplicationController
-  
+
     def index
       @ideas = Idea.order("created_at ASC")
       render json: @ideas
@@ -25,11 +25,11 @@ module Api::V1
         render json: @idea.errors, status: :unprocessable_entity
       end
     end
-    
-	private	
+
+	private
 	def idea_params
 		params.require(:idea).permit(:title, :body, :color)
 		end
 	end
-end 
+end
 
