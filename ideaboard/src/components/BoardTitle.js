@@ -1,15 +1,21 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { ActionCable } from 'react-actioncable-provider'
 
 class BoardTitle extends Component {
-  state = {
-    title: "",
-    editMode: false,
-    id: null
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: "",
+      editMode: false,
+      id: null
+    }
+
+    this.handleBoardEvents = this.handleBoardEvents.bind(this)
   }
 
   componentDidMount() {
-   axios.get('http://localhost:3001/api/v1/boards.json')
+    axios.get('http://localhost:3001/api/v1/boards.json')
     .then(response => {
       const title = response.data[0].boardtitle
 
@@ -21,32 +27,30 @@ class BoardTitle extends Component {
     .catch(error => console.log(error))
   }
 
-   editTitle = (title) => {
+  editTitle = (title) => {
     this.setState({
       editMode: !this.state.editMode
-      })
-    }
+    })
+  }
 
-
-   unFocus = (e) => {
-     if (e.target.value !== "") {
+  unFocus = (e) => {
+    if (e.target.value !== "") {
       this.setState({
         editMode: false,
         title: e.target.value
       })
-     } else {
-       this.setState({
+    } else {
+      this.setState({
         editMode: false,
         title: "DEFAULT TITLE"
       })
-     }
+    }
     axios
       .put(`http://localhost:3001/api/v1/boards/${this.state.id}`, {board: {boardtitle: e.target.value}})
       .then( res => {
     })
-     .catch(error => console.log(error))
-   }
-
+    .catch(error => console.log(error))
+  }
 
   handleKey = (e) => {
     if (e.key === 'Enter') {
@@ -72,10 +76,23 @@ class BoardTitle extends Component {
     }
   }
 
+  handleBoardEvents = ({event, board}) => {
+    switch(event) {
+      case 'updated':
+        this.setState({title: board.boardtitle})
+        break
+      default:
+        console.warn("Unhandled event type")
+    }
+  }
 
   render(){
     return(
       <div className="title">
+        <ActionCable
+          channel={{channel: "BoardsChannel"}}
+          onReceived={this.handleBoardEvents}
+        />
         {
           this.state.editMode ?
           <input defaultValue={this.state.title} onBlur={this.unFocus} onKeyDown={this.handleKey} style={{width:"100%", height:"30px", fontSize:"30px"}}  onClick={this.changeTitle}/>
