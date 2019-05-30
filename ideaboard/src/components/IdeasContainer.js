@@ -146,7 +146,10 @@ class IdeasContainer extends Component {
 
     return (
       <div>
-      
+        <ActionCable
+          channel={{channel: 'IdeasChannel'}}
+          onReceived={this.handleReceivedIdeaEvent}
+        />
 
         <div className="main-div">
           <div className="board-title" onClick={this.handleEditing}>

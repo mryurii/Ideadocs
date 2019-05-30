@@ -8,14 +8,18 @@ module Api::V1
 
     def create
       @idea = Idea.create(idea_params)
-       ActionCable.server.broadcast 'ideas', event: :created, idea: @idea
+
+      ActionCable.server.broadcast 'ideas', event: :created, idea: @idea
+
       render json: @idea
     end
 
     def update
       @idea = Idea.find(params[:id])
       @idea.update_attributes(idea_params)
-       ActionCable.server.broadcast 'ideas', event: :updated, idea: @idea
+
+      ActionCable.server.broadcast 'ideas', event: :updated, idea: @idea
+
       render json: @idea
     end
 
