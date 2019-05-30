@@ -18,3 +18,12 @@ ideas = Idea.create(
 		}
 
 	])
+
+10.times do
+	Idea.create(
+		title: FFaker::Movie.title,
+		body: FFaker::Lorem.phrase
+	)
+end
+
+Board.create!(boardtitle: 'Explore board')
