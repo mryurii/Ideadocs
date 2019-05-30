@@ -7,12 +7,13 @@ import Notification from './components/Notification'
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       TrasitionIn: false,
       notification: ''
     }
     this.setTransitionIn = this.setTransitionIn.bind(this)
+    this.setNotification = this.setNotification.bind(this)
   }
 
   setTransitionIn = (e) => {
@@ -31,7 +32,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-
         <Navbar expand="lg" variant="light" bg="light">
           <Container>
             <Navbar.Brand href="/" className="navbar">IDEADOCS</Navbar.Brand>
