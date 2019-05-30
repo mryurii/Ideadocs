@@ -7,7 +7,7 @@ import Notification from './components/Notification'
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       TrasitionIn: false,
       notification: ''
