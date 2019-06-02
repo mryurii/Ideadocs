@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios' 
-
+import { ActionCable } from 'react-actioncable-provider'
 
 
 class BoardTitle extends Component {
@@ -81,10 +81,25 @@ class BoardTitle extends Component {
    }
    }
 
+    handleBoardEvents = ({event, board}) => {
+    switch(event) {
+      case 'updated':
+        this.setState({title: board.boardtitle})
+        break
+      default:
+        console.warn("Unhandled event type")
+    }
+  }
+
+
 
   render(){
     return(
       <div className="title">
+       <ActionCable
+          channel={{channel: "BoardsChannel"}}
+          onReceived={this.handleBoardEvents}
+        />
         {
           this.state.editMode ? 
           <input defaultValue={this.state.title} onBlur={this.unFocus} onKeyDown={this.handleKey} style={{width:"100%", height:"30px", fontSize:"30px"}}  onClick={this.changeTitle}/> 

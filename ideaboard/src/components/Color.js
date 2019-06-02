@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { TwitterPicker } from 'react-color';
-import axios from 'axios'
 
 class Color extends React.Component {
   state = {

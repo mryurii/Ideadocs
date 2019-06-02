@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ActionCableProvider } from 'react-actioncable-provider'
 
- ReactDOM.render(<App />, document.getElementById('root'));
+const API_WS_ROOT = `ws://${window.location.hostname}:3001/cable`
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
+ReactDOM.render(
+  <ActionCableProvider url={API_WS_ROOT}>
+    <App />
+  </ActionCableProvider>,
+  document.getElementById('root')
+)
+
 serviceWorker.unregister();
