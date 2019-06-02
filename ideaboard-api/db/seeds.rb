@@ -1,7 +1,7 @@
 ideas = Idea.create(
 	[
 		{
-			title: "Work on this shit",
+			title: "Work on my cooking",
 			body: "Made of chocolate"
 		},
 		{
