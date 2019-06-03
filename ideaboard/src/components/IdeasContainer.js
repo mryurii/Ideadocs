@@ -124,7 +124,7 @@ class IdeasContainer extends Component {
           closeBox={ this.closeBox }
           className="tile"
           idea={idea}
-          key={idea.id}
+          key={`${idea.id}-${idea.updated_at}`}
           handleChangeStateColor={this.handleChangeStateColor}
           updateIdea={this.updateIdea}
           titleRef = {input => this.title = input}
