@@ -36,21 +36,14 @@ class IdeasContainer extends Component {
         break
       case 'updated':
         this.setState(prevState => {
-          const ideas = prevState.ideas.map((item) => {
-            if (item.id === idea.id) {
-              return Object.assign(item, idea)
-            } else {
-              return item
-            }
-          })
-
+          const index = prevState.ideas.map(i => i.id).indexOf(idea.id)
+          const ideas = update(prevState.ideas, {[index]: {$set: idea}})
           return { ideas }
         })
         break
       default:
         console.warn("Unhandled event type")
     }
-    console.log("XXXXXx")
   }
 
   addNewIdea = () => {
