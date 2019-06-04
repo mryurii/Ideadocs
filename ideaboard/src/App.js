@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import './App.css'
 import IdeasContainer from './components/IdeasContainer'
-import {Navbar, Container} from 'react-bootstrap';
+import {Navbar, Container} from 'react-bootstrap'
 import BoardTitle from './components/BoardTitle'
 import Notification from './components/Notification'
 
 class App extends Component {
-    constructor(props) {
-    super(props);
+  constructor(props) {
+    super(props)
     this.state = {
       TrasitionIn: false,
       notification: ''
@@ -25,11 +25,11 @@ class App extends Component {
     this.setState({notification: ''})
   }
 
-   setNotification = (notification) => {
+  setNotification = (notification) => {
     this.setState({ notification })
   }
 
-render() {
+  render() {
     return (
       <div className="App">
         <Navbar expand="lg" variant="light" bg="light">

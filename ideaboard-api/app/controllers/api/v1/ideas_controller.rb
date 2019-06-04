@@ -1,6 +1,6 @@
 module Api::V1
   class IdeasController < ApplicationController
-  
+
     def index
       @ideas = Idea.order("created_at ASC")
       render json: @ideas
@@ -8,14 +8,18 @@ module Api::V1
 
     def create
       @idea = Idea.create(idea_params)
-       ActionCable.server.broadcast 'ideas', event: :created, idea: @idea
+
+      ActionCable.server.broadcast 'ideas', event: :created, idea: @idea
+
       render json: @idea
     end
 
     def update
       @idea = Idea.find(params[:id])
       @idea.update_attributes(idea_params)
-       ActionCable.server.broadcast 'ideas', event: :updated, idea: @idea
+
+      ActionCable.server.broadcast 'ideas', event: :updated, idea: @idea
+
       render json: @idea
     end
 
@@ -27,11 +31,11 @@ module Api::V1
         render json: @idea.errors, status: :unprocessable_entity
       end
     end
-    
-	private	
+
+	private
 	def idea_params
 		params.require(:idea).permit(:title, :body, :color)
 		end
 	end
-end 
+end
 

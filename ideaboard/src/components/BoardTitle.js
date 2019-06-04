@@ -5,83 +5,80 @@ import { ActionCable } from 'react-actioncable-provider'
 
 
 class BoardTitle extends Component {
-  state = {
-    title: "",
-    editMode: false,
-    id: null
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: "",
+      editMode: false,
+      id: null
+    }
+
+    this.handleBoardEvents = this.handleBoardEvents.bind(this)
   }
 
   componentDidMount() {
-   axios.get('http://localhost:3001/api/v1/boards.json')
+    axios.get('http://localhost:3001/api/v1/boards.json')
     .then(response => {
-      const title = response.data[0].boardtitle;
+      const title = response.data[0].boardtitle
+
       this.setState({boards: response.data,
         title: title === "" ? "DEFAULT TITLE" : title,
         id: response.data[0].id
       })
-      console.log(response.data)
-      console.log("TITLE! ", response.data[0].boardtitle)
     })
     .catch(error => console.log(error))
   }
 
-   editTitle = (title) => {
+  editTitle = (title) => {
     this.setState({
       editMode: !this.state.editMode
-      })
-    }
+    })
+  }
 
-
-   unFocus = (e) => {
-     if (e.target.value != "") { 
+  unFocus = (e) => {
+    if (e.target.value !== "") {
       this.setState({
         editMode: false,
         title: e.target.value
       })
-     } else {
-       this.setState({
+    } else {
+      this.setState({
         editMode: false,
         title: "DEFAULT TITLE"
       })
-     }   
+    }
     axios
       .put(`http://localhost:3001/api/v1/boards/${this.state.id}`, {board: {boardtitle: e.target.value}})
       .then( res => {
-
-      console.log(res);
-      console.log(res.data)
     })
-     .catch(error => console.log(error))
-   }
+    .catch(error => console.log(error))
+  }
 
-
-   handleKey = (e) => {
+  handleKey = (e) => {
     if (e.key === 'Enter') {
-    console.log(e.target.value)
-     if (e.target.value == "") {
-       console.log("dissapear")
-       this.setState({
-        title: "DEFAULT TITLE",
-        editMode: false
-      })
-     } else {
-      console.log("nooo")
-      this.setState({
-        editMode: false,
-        title: e.target.value
-      })
-     }    
-    axios
-      .put(`http://localhost:3001/api/v1/boards/${this.state.id}`, {board: {boardtitle: e.target.value}})
-      .then( res => {
-      console.log(res);
-      console.log(res.data)
-    })
-     .catch(error => console.log(error))
-   }
-   }
+      if (e.target.value === "") {
+        this.setState({
+          title: "DEFAULT TITLE",
+          editMode: false
+        })
+      } else {
+        this.setState({
+          editMode: false,
+          title: e.target.value
+        })
+      }
 
-    handleBoardEvents = ({event, board}) => {
+      axios
+        .put(`http://localhost:3001/api/v1/boards/${this.state.id}`, { board: { boardtitle: e.target.value } })
+        .then( res => {
+          console.log(res);
+          console.log(res.data)
+        })
+        .catch(error => console.log(error))
+    }
+  }
+
+  handleBoardEvents = ({event, board}) => {
     switch(event) {
       case 'updated':
         this.setState({title: board.boardtitle})
@@ -96,20 +93,20 @@ class BoardTitle extends Component {
   render(){
     return(
       <div className="title">
-       <ActionCable
+        <ActionCable
           channel={{channel: "BoardsChannel"}}
           onReceived={this.handleBoardEvents}
         />
         {
-          this.state.editMode ? 
-          <input defaultValue={this.state.title} onBlur={this.unFocus} onKeyDown={this.handleKey} style={{width:"100%", height:"30px", fontSize:"30px"}}  onClick={this.changeTitle}/> 
+          this.state.editMode ?
+          <input defaultValue={this.state.title} onBlur={this.unFocus} onKeyDown={this.handleKey} style={{width:"100%", height:"30px", fontSize:"30px"}}  onClick={this.changeTitle}/>
           :
           <div className = "titlediv" align="center">
           <h1 className="boardtitle" onClick={this.editTitle}>{this.state.title}</h1>
           </div>
         }
       </div>
-      
+
     );
   }
 }
