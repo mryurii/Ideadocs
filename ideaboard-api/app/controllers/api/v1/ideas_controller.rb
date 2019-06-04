@@ -32,10 +32,11 @@ module Api::V1
       end
     end
 
-	private
-	def idea_params
-		params.require(:idea).permit(:title, :body, :color)
-		end
-	end
+    private
+
+    def idea_params
+    	params.require(:idea).permit(:title, :body, :color)
+    end
+  end
 end
 
