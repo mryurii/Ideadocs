@@ -32,7 +32,9 @@ class IdeasContainer extends Component {
   handleReceivedIdeaEvent = ({ event, idea }) => {
     switch(event) {
       case 'created':
-        this.setState({ ideas: [...this.state.ideas, idea] })
+        if (!this.state.ideas.map(i => i.id).includes(idea.id)) {
+          this.setState({ ideas: [...this.state.ideas, idea] })
+        }
         break
       case 'updated':
         this.setState(prevState => {
