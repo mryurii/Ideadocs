@@ -32,15 +32,9 @@ class IdeasContainer extends Component {
   handleReceivedIdeaEvent = ({ event, idea }) => {
     switch(event) {
       case 'created':
-        this.setState(prevState => {
-          const currentIds = prevState.ideas.map(i => i.id)
-          const isIdeaNotRendered = !currentIds.includes(idea.id)
-
-          if (isIdeaNotRendered) {
-            const ideas = update(this.state.ideas, {$push: [idea]})
-            this.setState({ideas})
-          }
-        })
+        if (!this.state.ideas.map(i => i.id).includes(idea.id)) {
+          this.setState({ ideas: [...this.state.ideas, idea] })
+        }
         break
       case 'updated':
         this.setState(prevState => {
@@ -48,17 +42,6 @@ class IdeasContainer extends Component {
             if (item.id === idea.id) {
               return Object.assign(item, idea)
             } else {
-              return item
-            }
-          })
-
-          return { ideas }
-        })
-        break
-      case 'deleted':
-        this.setState(prevState => {
-          const ideas = prevState.ideas.filter((item) => {
-            if (item.id !== idea.id) {
               return item
             }
           })
