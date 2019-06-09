@@ -55,6 +55,17 @@ class IdeasContainer extends Component {
           return { ideas }
         })
         break
+      case 'deleted':
+        this.setState(prevState => {
+          const ideas = prevState.ideas.filter((item) => {
+            if (item.id !== idea.id) {
+              return item
+            }
+          })
+
+          return { ideas }
+        })
+        break
       default:
         console.warn("Unhandled event type")
     }
