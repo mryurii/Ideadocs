@@ -25,8 +25,11 @@ module Api::V1
 
     def destroy
       @idea = Idea.find(params[:id])
+
       if @idea.destroy
-        head :no_content, status: :ok
+        ActionCable.server.broadcast(:ideas, event: :deleted, idea: @idea)
+
+        head :no_content
       else
         render json: @idea.errors, status: :unprocessable_entity
       end
