@@ -32,9 +32,15 @@ class IdeasContainer extends Component {
   handleReceivedIdeaEvent = ({ event, idea }) => {
     switch(event) {
       case 'created':
-        if (!this.state.ideas.map(i => i.id).includes(idea.id)) {
-          this.setState({ ideas: [...this.state.ideas, idea] })
-        }
+        this.setState(prevState => {
+          const currentIds = prevState.ideas.map(i => i.id)
+          const isIdeaNotRendered = !currentIds.includes(idea.id)
+
+          if (isIdeaNotRendered) {
+            const ideas = update(this.state.ideas, {$push: [idea]})
+            this.setState({ideas})
+          }
+        })
         break
       case 'updated':
         this.setState(prevState => {
