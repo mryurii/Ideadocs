@@ -2,14 +2,15 @@ module Api::V1
   class IdeasController < ApplicationController
 
     def index
-      @ideas = Idea.order("created_at ASC")
+      @ideas = Idea.order(created_at: :asc)
+
       render json: @ideas
     end
 
     def create
       @idea = Idea.create(idea_params)
 
-      ActionCable.server.broadcast 'ideas', event: :created, idea: @idea
+      ActionCable.server.broadcast(:ideas, event: :created, idea: @idea)
 
       render json: @idea
     end
@@ -18,7 +19,7 @@ module Api::V1
       @idea = Idea.find(params[:id])
       @idea.update_attributes(idea_params)
 
-      ActionCable.server.broadcast 'ideas', event: :updated, idea: @idea
+      ActionCable.server.broadcast(:ideas, event: :updated, idea: @idea)
 
       render json: @idea
     end

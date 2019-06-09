@@ -3,7 +3,7 @@ import axios from 'axios'
 import Idea from './Idea'
 import update from 'immutability-helper'
 import Color from './Color'
-import { ActionCable } from 'react-actioncable-provider';
+import { ActionCable } from 'react-actioncable-provider'
 
 class IdeasContainer extends Component {
   state =  {
@@ -69,7 +69,6 @@ class IdeasContainer extends Component {
       default:
         console.warn("Unhandled event type")
     }
-    console.log("XXXXXx")
   }
 
   addNewIdea = () => {
