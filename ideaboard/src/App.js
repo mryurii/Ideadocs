@@ -1,32 +1,25 @@
 import React, { Component } from 'react'
 import './App.css'
 import IdeasContainer from './components/IdeasContainer'
-import {Navbar, Container} from 'react-bootstrap'
+import { Navbar, Container } from 'react-bootstrap'
 import BoardTitle from './components/BoardTitle'
 import Notification from './components/Notification'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      TrasitionIn: false,
-      notification: ''
-    }
-    this.setTransitionIn = this.setTransitionIn.bind(this)
-    this.setNotification = this.setNotification.bind(this)
-  }
-
-  setTransitionIn = (e) => {
-    this.setState({transisitonIn: e})
-  }
-
-   resetNotification = () => { 
-    this.setTransitionIn(false)
-    this.setState({notification: ''})
+  state = {
+    transisitonIn: false,
+    notification: null
   }
 
   setNotification = (notification) => {
-    this.setState({ notification })
+    this.setState(
+      { notification, transisitonIn: true },
+      this.hideNotificationWithDelay
+    )
+  }
+
+  hideNotificationWithDelay = () => {
+    setTimeout(() => this.setState({ transisitonIn: false }), 1000)
   }
 
   render() {
@@ -37,7 +30,10 @@ class App extends Component {
             <Navbar.Brand href="/" className="navbar">IDEADOCS</Navbar.Brand>
 
             <div className="notification">
-              <Notification in={this.state.transisitonIn} notification={this.state.notification} />
+              <Notification
+                in={this.state.transisitonIn}
+                notification={this.state.notification}
+              />
             </div>
           </Container>
         </Navbar>
@@ -45,16 +41,12 @@ class App extends Component {
         <div className="title-container">
         </div>
 
-        <BoardTitle />
+        <BoardTitle onChange={this.setNotification} />
 
         <div className="App-header">
         </div>
 
-        <IdeasContainer
-          onChange={this.setNotification}
-          setTransitionIn={this.setTransitionIn}
-          resetNotification={this.resetNotification}
-        />
+        <IdeasContainer onChange={this.setNotification} />
       </div>
     )
   }

@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 import { ActionCableProvider } from 'react-actioncable-provider'
 
 const API_WS_ROOT = `ws://${window.location.hostname}:3001/cable`
@@ -13,5 +12,3 @@ ReactDOM.render(
   </ActionCableProvider>,
   document.getElementById('root')
 )
-
-serviceWorker.unregister();

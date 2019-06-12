@@ -3,30 +3,22 @@ import axios from 'axios'
 import Idea from './Idea'
 import update from 'immutability-helper'
 import Color from './Color'
-import { ActionCable } from 'react-actioncable-provider'
+import { ActionCableConsumer } from 'react-actioncable-provider'
 
 class IdeasContainer extends Component {
   state =  {
     ideas: [] ,
-    editingIdeaID: null,
-    editingTitleID: null,
-    notification: '',
     selected: null,
-    color: " ",
     displayColorPicker: false
   }
 
-  constructor(props) {
-    super(props)
-    this.references = new Map()
-    this.selected = this.selected.bind(this)
-    this.handleReceivedIdeaEvent = this.handleReceivedIdeaEvent.bind(this)
-  }
+  references = new Map()
+  title = null
 
   componentDidMount() {
    axios.get('http://localhost:3001/api/v1/ideas.json')
     .then(response => { this.setState({ ideas: response.data }) })
-    .catch(error => console.log(error))
+    .catch(error => console.warn(error))
   }
 
   handleReceivedIdeaEvent = ({ event, idea }) => {
@@ -57,11 +49,7 @@ class IdeasContainer extends Component {
         break
       case 'deleted':
         this.setState(prevState => {
-          const ideas = prevState.ideas.filter((item) => {
-            if (item.id !== idea.id) {
-              return item
-            }
-          })
+          const ideas = prevState.ideas.filter((item) => item.id !== idea.id)
 
           return { ideas }
         })
@@ -74,29 +62,25 @@ class IdeasContainer extends Component {
   addNewIdea = () => {
     axios.post(
       'http://localhost:3001/api/v1/ideas',
-      {
-        idea: {
-          title: '',
-          body: '',
-          color: ''
-        }
-      }
+      { idea: { title: null, body: null, color: null } }
     )
     .then(response => {
-      const ideas = update(this.state.ideas, {$push: [response.data]})
-      this.setState({ideas: ideas, editingIdeaID: response.data.id})
+      const currentIds = this.state.ideas.map(i => i.id)
+      const isIdeaNotRendered = !currentIds.includes(response.data.id)
+
+      if (isIdeaNotRendered) {
+        const ideas = update(this.state.ideas, { $push: [response.data] })
+        this.setState(
+          { ideas: ideas },
+          () => this.selected(response.data.id, true)
+        )
+      }
     })
-    .catch(error => console.log(error))
+    .catch(error => console.error(error))
   }
 
   updateIdea = (idea) => {
-    const ideaIndex = this.state.ideas.findIndex(x => x.id === idea.id)
-    const ideas = update(this.state.ideas, {[ideaIndex]: {$set:idea}})
-    this.setState({ideas: ideas})
-
     this.props.onChange("All changes saved");
-    this.props.setTransitionIn(true)
-    this.sub.send({ ideas: idea.target.value, id: idea.id})
   }
 
   deleteIdea = (id) => {
@@ -109,23 +93,18 @@ class IdeasContainer extends Component {
     .catch(error => console.log(error))
   }
 
-  enableEditing = (id) => {
-    this.setState({editingIdeaID: id}, () => {this.title.focus() })
-  }
-
   // color
 
-  handleClick = () => {
-    this.setState({ displayColorPicker: !this.state.displayColorPicker })
-  };
+  selected(ideaId, enforceFocus = false) {
+    let selectedRef = this.references.get(ideaId)
+    this.setState(
+      {
+        selected: selectedRef,
+        displayColorPicker: true,
+      },
+      () => enforceFocus ? this.title.focus() : null
 
-  selected(e) {
-    let selectedRef = this.references.get(e)
-    this.setState({ selected: selectedRef, displayColorPicker: true })
-  }
-
-  handleEditing = (id) => {
-    this.setState({editingTitleID: id})
+    )
   }
 
   closeBox = () => {
@@ -133,54 +112,41 @@ class IdeasContainer extends Component {
       this.setState({ displayColorPicker: false })
     }, 200);
   }
-  changeColor = (color) => {
-    this.setState({color});
-  }
-
-  handleChangeStateColor = (color) => {
-    console.log(color)
-  }
 
   render() {
     const ideas = this.state.ideas.map((idea) => {
       return(
         <Idea
-          color={this.state.color}
           closeBox={ this.closeBox }
           className="tile"
           idea={idea}
           key={`${idea.id}-${idea.updated_at}`}
-          handleChangeStateColor={this.handleChangeStateColor}
           updateIdea={this.updateIdea}
           titleRef = {input => this.title = input}
-          resetNotification={this.props.resetNotification}
           onDelete={this.deleteIdea}
           onChangeComplete={ this.handleChangeComplete }
           ref = {c => this.references.set(idea.id, c)}
-          onClick={() => {this.enableEditing && this.selected(idea.id)}}
+          onClick={() => { this.selected(idea.id) }}
         />
       )
     })
 
     return (
       <div>
-        <ActionCable
+        <ActionCableConsumer
           channel={{channel: 'IdeasChannel'}}
           onReceived={this.handleReceivedIdeaEvent}
         />
 
         <div className="main-div">
-          <div className="board-title" onClick={this.handleEditing}>
-          </div>
-          <div className="newideabtn-div">
-          </div>
+          <div className="newideabtn-div"></div>
+
           <div className="color-div">
             <div onClick={ this.handleUnselect }/>
+
             <Color
-              changeColor={this.changeColor}
               className="color-div"
               selected={this.state.selected}
-              color={this.state.color}
               displayColorPicker={this.state.displayColorPicker}
             />
           </div>
